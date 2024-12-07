@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-
 class GoogleAuthController extends Controller
 {
     // Redirect to Google for authentication
@@ -16,28 +15,40 @@ class GoogleAuthController extends Controller
     {
         // Add 'prompt' to force account selection
         return Socialite::driver('google')
-            ->with(['prompt' => 'select_account'])
-            ->redirect();
+        ->scopes(['openid', 'profile', 'email']) // Request profile and email information
+        ->with(['prompt' => 'select_account'])
+        ->redirect();
     }
 
     // Handle the callback from Google
     public function handleGoogleCallback()
-    {
-        try {
-            // Get user data from Google
-            $googleUser = Socialite::driver('google')->stateless()->user();
+{
+    try {
+        // Get user data from Google
+        $googleUser = Socialite::driver('google')->stateless()->user();
 
-            // Check if the user already exists in the database
-            $user = User::where('email', $googleUser->getEmail())->first();
+        // Debugging: Check if profile picture is being fetched correctly
+        //dd($googleUser); // This will show the avatar URL for debugging
 
-            // If the user doesn't exist, create a new user
-            if (!$user) {
-                $user = User::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'password' => bcrypt(Str::random(24)), // Set a random password
-                ]);
+        // Check if the user already exists in the database
+        $user = User::where('email', $googleUser->getEmail())->first();
+
+        if ($user) {
+            // Update existing user with the latest Google data
+            $user->update([
+                'name' => $googleUser->getName(),
+                'google_id' => $googleUser->getId(),
+                'profile_photo_url' => $googleUser->getAvatar(), // Update profile picture
+            ]);
+        } else {
+            // Create a new user if one doesn't exist
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'google_id' => $googleUser->getId(),
+                'profile_photo_url' => $googleUser->getAvatar(), // Save profile picture
+                'password' => bcrypt(Str::random(24)), // Set a random password
+            ]);
             }
 
             // Log the user in

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GoogleAuthController;
 use Illuminate\Support\Facades\Auth; // Ensure this is imported for checking authentication
+use App\Http\Controllers\ProfileController;
 
 // Google Login Routes
 Route::get('google', [GoogleAuthController::class, 'redirectToGoogle'])->name('google');
@@ -22,6 +23,11 @@ Route::post('/signup', [AuthController::class, 'register']);
 // Public routes for login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+//update profile
+// web.php (routes)
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
 
 // Protected routes for authenticated users
 Route::middleware('auth')->group(function () {

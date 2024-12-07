@@ -3,45 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - Zoom Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f5f7fa;
-            --text-color: #333;
-            --error-color: #e74c3c;
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --input-bg: #f5f5f5;
+            --input-border: #e0e0e0;
+            --input-focus: #000000;
+            --button-bg: #000000;
+            --button-text: #ffffff;
+            --button-hover: #333333;
+            --error-color: #ff0000;
+            --shape-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --input-bg: #2a2a2a;
+            --input-border: #3a3a3a;
+            --input-focus: #ffffff;
+            --button-bg: #ffffff;
+            --button-text: #000000;
+            --button-hover: #e0e0e0;
+            --error-color: #ff6b6b;
+            --shape-color: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--secondary-color);
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
-            background-color: white;
-            padding: 2rem;
+            background-color: var(--background-color);
+            padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 400px; /* Keeping the horizontal size fixed */
+            min-height: 450px; /* Ensure enough height to fit content */
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centering contents vertically */
         }
 
         h1 {
             text-align: center;
-            color: var(--primary-color);
+            color: var(--text-color);
             margin-bottom: 1.5rem;
             font-weight: 600;
+            font-size: 1.8rem;
         }
 
         .error-messages {
-            background-color: #fdeaea;
+            background-color: rgba(255, 0, 0, 0.1);
             color: var(--error-color);
             padding: 1rem;
             border-radius: 4px;
@@ -60,7 +90,7 @@
 
         label {
             font-size: 0.9rem;
-            color: #555;
+            color: var(--text-color);
             margin-bottom: 0.5rem;
             display: block;
         }
@@ -68,38 +98,46 @@
         input[type="text"], input[type="email"], input[type="password"] {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #ddd;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
             border-radius: 4px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
         }
 
         input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-            border-color: var(--primary-color);
+            border-color: var(--input-focus);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
         }
 
         button {
             width: 100%;
             padding: 0.75rem;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--button-bg);
+            color: var(--button-text);
             border: none;
             border-radius: 4px;
             font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.1s ease;
         }
 
         button:hover {
-            background-color: #3a7bc8;
+            background-color: var(--button-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         .google-btn {
-            background-color: #fff;
-            color: #757575;
-            border: 1px solid #ddd;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--input-border);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -107,7 +145,7 @@
         }
 
         .google-btn:hover {
-            background-color: #f5f5f5;
+            background-color: var(--input-border);
         }
 
         .google-icon {
@@ -119,35 +157,133 @@
         p {
             text-align: center;
             font-size: 0.9rem;
-            color: #555;
+            color: var(--text-color);
             margin-top: 1.5rem;
         }
 
         a {
-            color: var(--primary-color);
-            text-decoration: none;
+            color: var(--text-color);
+            text-decoration: underline;
+            transition: opacity 0.3s ease;
         }
 
         a:hover {
-            text-decoration: underline;
+            opacity: 0.7;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            background-color: var(--background-color);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-toggle label {
+            width: 50px;
+            height: 26px;
+            background-color: var(--input-border);
+            display: inline-block;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .mode-toggle label::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-color: var(--background-color);
+            position: absolute;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s ease;
+        }
+
+        .mode-toggle input:checked + label {
+            background-color: var(--text-color);
+        }
+
+        .mode-toggle input:checked + label::after {
+            transform: translateX(24px);
+        }
+
+        .mode-toggle input {
+            display: none;
+        }
+
+        .mode-toggle-text {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .creative-shape {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background-color: var(--shape-color);
+            border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            animation: morph 15s ease-in-out infinite;
+            transition: all 1s ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            }
+            25% {
+                border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+            }
+            50% {
+                border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%;
+            }
+            75% {
+                border-radius: 35% 65% 65% 35% / 30% 50% 50% 70%;
+            }
+            100% {
+                border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+            }
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 1.5rem;
+                padding: 1.2rem;
+                max-width: 320px; /* Adjusted width for small screens */
+            }
+            .mode-toggle {
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="mode-toggle">
+        <span class="mode-toggle-text">Dark Mode</span>
+        <input type="checkbox" id="dark-mode-toggle">
+        <label for="dark-mode-toggle"></label>
+    </div>
+
+    <div class="creative-shape"></div>
+
     <div class="container">
         <h1>Sign Up</h1>
 
-        <!-- Show validation errors -->
-        @if ($errors->any())
+        <!-- Error messages (if any) -->
+        @if($errors->any())
             <div class="error-messages">
                 <ul>
-                    @foreach ($errors->all() as $error)
+                    @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -191,5 +327,36 @@
 
         <p>Already have an account? <a href="{{ route('login') }}">Sign In</a></p>
     </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('change', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        // Animate the creative shape
+        const creativeShape = document.querySelector('.creative-shape');
+        let x = Math.random() * (window.innerWidth - 300);
+        let y = Math.random() * (window.innerHeight - 300);
+        let dx = (Math.random() - 0.5) * 2;
+        let dy = (Math.random() - 0.5) * 2;
+
+        function animateShape() {
+            x += dx;
+            y += dy;
+
+            if (x <= 0 || x >= window.innerWidth - 300) dx = -dx;
+            if (y <= 0 || y >= window.innerHeight - 300) dy = -dy;
+
+            creativeShape.style.left = `${x}px`;
+            creativeShape.style.top = `${y}px`;
+
+            requestAnimationFrame(animateShape);
+        }
+
+        animateShape();
+    </script>
 </body>
 </html>
